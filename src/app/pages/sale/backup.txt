@@ -1,0 +1,546 @@
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {ItemService} from '../product/product.service';
+import {Order, OrderService} from './order.service';
+import {FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CommonValidators } from '../../shared/services/common-validators';
+import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
+import {ProductUnit, ProductUnitService} from '../product/product-unit.service';
+import { NotificationService } from '../../shared/services/notification.service';
+
+
+@Component({
+  selector: 'app-sale-add',
+  template: `
+    <nz-spin
+      *ngIf="loading"
+      nzSimple
+      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);z-index: 9999"
+    ></nz-spin>
+    <form style="padding-top: 30px" [formGroup]="frm" nz-form [nzAutoTips]="autoTips">
+      <div nz-row>
+        <div
+          [nzLg]="{ span: 11, offset: 1 }"
+          [nzSm]="{ span: 24, offset: 0 }"
+          [nzXs]="{ span: 24, offset: 0 }"
+          nz-col
+        >
+          <nz-form-item>
+            <nz-form-label
+              [nzSm]="4"
+              nzLabelAlign="left"
+              nzRequired
+            >
+              {{ 'Customer' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="">
+              <app-customer-select formControlName="customerId"></app-customer-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div
+          [nzLg]="{ span: 10, offset: 2 }"
+          [nzSm]="{ span: 24, offset: 0 }"
+          [nzXs]="{ span: 24, offset: 0 }"
+          nz-col
+        >
+          <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
+              {{ 'Date' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="13" [nzXs]="24" nzErrorTip="">
+              <nz-date-picker
+                formControlName="date"
+                nzAllowClear="false"
+                nzFormat="yyyy-MM-dd"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
+              {{ 'Order Date' | translate }}
+            </nz-form-label>
+            <nz-form-control [nzSm]="13" [nzXs]="24" nzErrorTip="">
+              <nz-date-picker
+                formControlName="orderDate"
+                nzAllowClear="false"
+                nzFormat="yyyy-MM-dd"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div
+          [nzLg]="{ span: 22, offset: 1 }"
+          [nzSm]="{ span: 24, offset: 0 }"
+          [nzXs]="{ span: 24, offset: 0 }"
+          nz-col
+        >
+          <br />
+          <nz-form-item>
+            <nz-form-control
+              [nzSm]="24"
+              [nzXs]="24"
+              style="padding-right: 10px"
+            >
+              <nz-table
+                [nzData]="details.controls"
+                [nzFooter]="addNew"
+                [nzNoResult]="' '"
+                nzShowPagination="false"
+                nzSize="small"
+                nzTableLayout="fixed"
+              >
+                <ng-template #addNew>
+                  <button
+                    nz-button
+                    nzBlock
+                    (click)="addDetail()"
+                    nzType="link"
+                    style="font-weight: bold"
+                  >
+                    <i nz-icon nzTheme="outline" nzType="plus"></i>
+                    {{ 'Add' | translate }}
+                  </button>
+                </ng-template>
+                <thead>
+                <tr>
+                  <th class="col-header" style="width: 35px !important;">
+                    #
+                  </th>
+                  <th class="col-header" style="width: 50%">
+                    {{ 'Product' | translate }}
+                  </th>
+                  <th class="col-header" style="width: 15%">
+                    {{ 'Unit' | translate }}
+                  </th>
+                  <th
+                    class="col-header"
+                    style="width: 15%; text-align: right"
+                  >
+                    {{ 'Qty' | translate }}
+                  </th>
+                  <th
+                    class="col-header"
+                    style="width: 15%; text-align: right"
+                  >
+                    {{ 'Unit Price' | translate }}
+                  </th>
+                  <th
+                    class="col-header"
+                    style="width: 15%; text-align: right"
+                  >
+                    {{ 'Discount' | translate }}
+                  </th>
+                  <th
+                    class="col-header"
+                    style=" text-align: right; width:15%"
+                  >
+                    {{ 'Sub Total' | translate }}
+                  </th>
+                </tr>
+                </thead>
+                <tbody formArrayName="orderDetails">
+                <ng-container
+                  *ngFor="
+                      let group of details.controls;
+                      let i = index
+                    "
+                >
+                  <tr [formGroupName]="i">
+                    <td style="width: 20px !important;">
+                      <nz-form-item style="margin-bottom: 0 !important">
+                        <nz-form-control>
+                          <span class="rowno">{{ i + 1 }}</span>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </td>
+                    <td style="width: 50%;">
+                      <nz-form-item style="margin-bottom: 0 !important">
+                        <nz-form-control>
+                          <app-product-select
+                            (valueChange)="onProductSelected($event, i)"
+                            formControlName="productID"></app-product-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </td>
+                    <td style="width: 15%;">
+                      <nz-form-item style="margin-bottom: 0 !important">
+                        <nz-form-control>
+                          <nz-select
+                              formControlName="productUnitId"
+                              (ngModelChange)="onUnitChange($event, i)">
+                              <nz-option
+                                *ngFor="let unit of productUnitList"
+                                [nzLabel]="unit.unitTypeName"
+                                [nzValue]="unit.id"
+                              />
+                            </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </td>
+                    <td style="width: 15%; text-align: right">
+                      <nz-form-item style="margin-bottom: 0 !important">
+                        <nz-form-control>
+                          <input
+                            formControlName="qty"
+                            nz-input
+                            (ngModelChange)="onQTYChange($event, i)"
+                            style="text-align: right;"
+                          />
+                        </nz-form-control>
+                      </nz-form-item>
+                    </td>
+                    <td style="width: 15%; text-align: right">
+                      <nz-form-item style="margin-bottom: 0 !important">
+                        <nz-form-control>
+                          <nz-input-group
+                            class="disabledInput"
+                            [nzPrefix]="'$'"
+                          >
+                            <input
+                              formControlName="price"
+                              nz-input
+                              (ngModelChange)="onPriceChange($event,i)"
+                              style="text-align: right"
+                              type="text"
+                            />
+                          </nz-input-group>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </td>
+                    <td style="width: 15%; text-align: right">
+                      <nz-form-item style="margin-bottom: 0 !important">
+                        <nz-form-control>
+                          <nz-input-group
+                            class="disabledInput"
+                            [nzPrefix]="'%'"
+                          >
+                            <input
+                              (ngModelChange)="onTotalChange($event, i)"
+                              formControlName="discount"
+                              nz-input
+                              style="text-align: right"
+                              type="text"
+                            />
+                          </nz-input-group>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </td>
+                    <td style="width: calc(20% - 50px);; text-align: right">
+                      <nz-form-item style="margin-bottom: 0 !important">
+                        <nz-form-control>
+                          <nz-input-group
+                            class="disabledInput"
+                            [nzPrefix]="'$'"
+                          >
+                            <input
+                              formControlName="total"
+                              nz-input
+                              readonly
+                              style="text-align: right"
+                              type="text"
+                            />
+                          </nz-input-group>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </td>
+                    <td style="width: 30px;" class="action-cell">
+                      <a (click)="deleteDetail(i)" style="color: red">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
+                </tbody>
+              </nz-table>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row>
+        <div
+          [nzLg]="{ span: 12, offset: 12 }"
+          [nzSm]="{ span: 24, offset: 0 }"
+          [nzXs]="{ span: 24, offset: 0 }"
+          nz-col
+        >
+          <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">
+              សរុបត្រូវបង់
+            </nz-form-label>
+            <nz-form-control style="padding-right: 8px;" [nzSm]="14" [nzXs]="24" nzErrorTip="">
+              <nz-input-group
+                class="disabledInput"
+                [nzPrefix]="'$'"
+              >
+                <input
+                  formControlName="amount"
+                  nz-input
+                  readonly
+                  style="text-align: right; font-size: 16px; font-weight: bold"
+                  type="text"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">
+              បញ្ចុះតំលៃ
+            </nz-form-label>
+            <nz-form-control style="padding-right: 8px;" [nzSm]="14" [nzXs]="24" nzErrorTip="">
+              <nz-input-group
+                class="disabledInput"
+                [nzPrefix]="'%'"
+              >
+                <input
+                  (ngModelChange)="onAmountChange()"
+                  formControlName="discount"
+                  nz-input
+                  style="text-align: right; font-size: 16px; font-weight: bold"
+                  type="text"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">
+              បានទូទាត់
+            </nz-form-label>
+            <nz-form-control style="padding-right: 8px;" [nzSm]="14" [nzXs]="24" nzErrorTip="">
+              <nz-input-group
+                class="disabledInput"
+                [nzPrefix]="'$'"
+              >
+                <input
+                  formControlName="deposit"
+                  nz-input
+                  style="text-align: right; font-size: 16px; font-weight: bold"
+                  type="text"
+                />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+    <div *nzModalFooter>
+      <div nz-flex nzJustify="flex-end" nzGap="small">
+        <button nz-button nzType="default"
+                (click)="closeModal()">
+          {{ 'Cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          (click)="onSubmit()"
+          [disabled]="!frm.valid"
+          type="submit"
+          nzType="primary"
+        >
+          {{ 'Save' | translate }}
+        </button>
+      </div>
+    </div>
+  `,
+  standalone: false,
+})
+
+export class SaleAddComponent  implements OnInit, OnDestroy {
+  model: Order;
+  frm!: FormGroup;
+  loading: boolean = false;
+  productUnitList:ProductUnit[]=[];
+  error!: HttpErrorResponse;
+  warehouseId!: number;
+  control!: FormArray;
+  autoTips = CommonValidators.autoTips;
+  readonly modal = inject(NZ_MODAL_DATA);
+
+
+  constructor(
+    private fb: FormBuilder,
+    private productUnitService: ProductUnitService,
+    private orderService: OrderService,
+    private modalRef : NzModalRef<SaleAddComponent>,
+    private notification:NotificationService,
+  ) {}
+
+
+  get details(): FormArray {
+    return this.frm.get('orderDetails') as FormArray;
+  }
+
+  async ngOnInit() {
+    this.initControl(this.model);
+  }
+
+  closeModal(){
+    this.modalRef.triggerCancel();
+  }
+
+
+  onProductSelected(id:number, index: number){
+    this.productUnitService.getUnitsByProductId(id).subscribe((unit: ProductUnit[])=> {
+      this.getUnitByProductId(id);
+      this.details.at(index).patchValue({
+        rowNo: index,
+        id: unit[0].id,
+        unitTypeId: unit[0]?.unitTypeId ?? 0,
+        unitTypeName: unit[0].unitTypeName,
+        productUnitId: unit[0]?.id ?? 0,
+        qty: 1,
+        price: unit[0]?.price ?? 0,
+        discount: 0,
+        orderID: 0,
+        total: unit[0]?.price ?? 0,
+      });
+    });
+  }
+
+  // Add this new method to handle unit selection
+  onUnitChange(unitId: number, index: number): void {
+    const selectedUnit = this.productUnitList.find(unit => unit.id === unitId);
+    if (selectedUnit) {
+      const qty = this.details.at(index).get('qty')?.value || 1;
+      this.details.at(index).patchValue({
+        price: selectedUnit.price,
+        total: selectedUnit.price * qty
+      });
+      this.calculateTotal(qty, selectedUnit.price, index);
+    }
+  }
+  getUnitByProductId(productId:number){
+      this.productUnitService.getUnitsByProductId(productId).subscribe(
+        (res:ProductUnit[]) => {
+          this.productUnitList = res;
+          console.log("product unit list:",this.productUnitList)
+        }
+      )
+  }
+
+  onQTYChange(qty: number, index: number) {
+    const price = this.details.at(index).get('price')?.getRawValue();
+    this.calculateTotal(qty, price, index);
+  }
+
+  onPriceChange(price: number, index: number) {
+    const qty = this.details.at(index).get('qty')?.getRawValue();
+    this.calculateTotal(qty, price, index);
+  }
+
+  onProductUnitSelect(event: Event) {
+    const unitId = +(event.target as HTMLSelectElement).value;
+    const selectedUnit = this.productUnitList.find(pu => pu.id === unitId);
+    this.frm.get('price')?.setValue(selectedUnit?.price || '');
+  }
+
+  calculateTotal(qty: number, price :number , index: number) {
+    const total = qty * price;
+    this.details.at(index).get('total').patchValue(total);
+    const amount = this.details.getRawValue().map((x) => x.total).reduce((acc, total) => acc + total);
+    this.frm.get('amount').patchValue(amount);
+  }
+  onTotalChange(discount: number, index: number) {
+    const qty = this.details.at(index).get('qty')?.getRawValue();
+    const price = this.details.at(index).get('price')?.getRawValue();
+    const total = qty * price * (1 - discount / 100);
+    this.details.at(index).get('total').patchValue(total);
+    const amount = this.details.getRawValue().map((x) => x.total).reduce((acc, total) => acc + total);
+    this.frm.get('amount').patchValue(amount);
+  }
+
+  onAmountChange(): void {
+    const originalAmount = this.details.getRawValue().map((x) => x.total).reduce((acc, total) => acc + total, 0);
+    const discount = this.frm.get('discount')?.getRawValue() || 0;
+    const deposit = this.frm.get('deposit')?.getRawValue() || 0;
+    const discountedAmount = originalAmount * (1 - discount / 100);
+    const totalAmount = discountedAmount - deposit;
+    this.frm.get('amount').patchValue(totalAmount);
+  }
+
+  initControl(model:any): void {
+    const {
+      required,
+    } = CommonValidators;
+    this.frm = this.fb.group({
+      id: [null],
+      paymentMethodId: [0],
+      date: [new Date()],
+      orderDate: [new Date()],
+      discount: [0],
+      deposit: [0],
+      amount: [null],
+      customerId: [null, [required]],
+      refer: [0],
+      orderDetails: this.fb.array([
+        this.fb.group({
+          rowNo: [1],
+          id: [0],
+          productID: [null, [required]],
+          unitTypeID: [null],
+          productUnitId:[0],
+          qty: [null],
+          price: [null],
+          discount: [null],
+          orderID: [0],
+          total: [null],
+        })
+      ]),
+      warehouseId: [0]
+    });
+  }
+
+  initDetailControl(): FormGroup {
+    return this.fb.group({
+      rowNo: [this.details.value.length + 1],
+      id: [0],
+      productID: [0],
+      unitTypeID: [0],
+      unitTypeName:[null],
+      productUnitId:[0],
+      qty: [0],
+      price: [0],
+      discount: [0],
+      orderID: [0],
+      total: [0],
+    });
+  }
+
+
+  addDetail(): void {
+    this.details.push(this.initDetailControl());
+  }
+
+  deleteDetail(index: number): void {
+   this.details.removeAt(index);
+  }
+
+
+  onSubmit(): void {
+    if (this.frm.valid) {
+      this.frm.patchValue({ warehouseId: 1 , paymentMethodId: 1});
+      this.loading = true;
+      const model = this.frm.getRawValue();
+      this.orderService.add(model).subscribe({
+        next: async () => {
+          this.loading = false;
+          await this.modalRef.triggerOk();
+          this.notification.showAddSuccess();
+        },
+        error: (err:any) => {
+          console.log("form value",this.frm.value)
+          this.loading = false;
+          console.log(err);
+        }
+      })
+    }
+  }
+  ngOnDestroy() {
+
+  }
+
+}

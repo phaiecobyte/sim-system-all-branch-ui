@@ -1,0 +1,210 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+/**
+  Declare variable or method for styles
+*/
+
+$kantumruy-pro-url: "/fonts/KantumruyPro.woff2";
+$inter-url: "/fonts/Inter.woff2";
+$scrollbar-border-radius: "10px";
+$scrollbar-width: 5px;
+$scrollbar-track-bg: #e2e2e2;
+$scrollbar-thumb-bg: #bcbcbc;
+$scrollbar-thumb-hover-bg: #a0a0a0;
+$scrollbar-thumb-active-bg: #909090;
+$border-radius: 5px;
+
+/* Font fallback variables */
+$primary-font: 'Battambang', 'Roboto', sans-serif;
+$secondary-font: 'Roboto', Arial, sans-serif;
+
+@mixin scrollbar-thumb-styles($color) {
+  background: $color;
+  border-radius: #{$scrollbar-border-radius};
+}
+
+body{
+  font-family: $primary-font;
+  background-color: inherit;
+  nz-layout{
+    nz-content{
+      background: inherit;
+    }
+    nz-footer{
+      background: inherit;
+    }
+  }
+
+  .ant-checkbox-inner,
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+  nz-date-picker,
+  nz-input-group,
+  [nz-checkbox],
+  [nz-input],
+  [nz-button],
+  .ant-tag,
+  .ant-picker
+  {
+    border-radius: $border-radius !important;
+  }
+
+  .ant-btn-circle{
+    border-radius: 50% !important;
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    width: $scrollbar-width;
+  }
+  .scrollbar::-webkit-scrollbar-track {
+    @include scrollbar-thumb-styles($scrollbar-track-bg);
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    @include scrollbar-thumb-styles($scrollbar-thumb-bg);
+  }
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @include scrollbar-thumb-styles($scrollbar-thumb-hover-bg);
+  }
+  .scrollbar::-webkit-scrollbar-thumb:active {
+    @include scrollbar-thumb-styles($scrollbar-thumb-active-bg);
+  }
+  .scrollbar {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .cdk-drag-preview {
+    display: flex;
+    background: rgba(0, 0, 0, 0.1);
+    gap: 1em;
+    align-items: center;
+    padding: 0 4px;
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+
+  .nz-disable-td {
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+  .ant-input[disabled],
+  .ant-picker-input > input[disabled] {
+    color: var(--ant-disabled-color);
+  }
+
+  nz-select, .ant-picker {
+    width: 100%;
+  }
+
+
+  .ant-table-thead > tr > th{
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  [nz-menu].menu-custom {
+    padding: 8px;
+    > [nz-menu-item]{
+      border-radius: 6px;
+    }
+
+    > [nz-menu-item], [nz-submenu-title]{
+      padding-left: 16px !important;
+    }
+    > [nz-menu-item]:after{
+      display: none;
+    }
+    > [nz-menu-item]{
+      border-radius: 6px;
+    }
+    > [nz-submenu]{
+      > [nz-menu-item]{
+        padding-left: 40px !important;
+      }
+    }
+  }
+
+  .ant-upload-list-picture-card .ant-upload-list-item,
+  .ant-upload.ant-upload-select-picture-card
+  {
+    border-radius: $border-radius;
+  }
+
+  .ant-btn-icon-only.ant-btn-sm{
+    padding: 0 !important;
+  }
+
+  .avatar{
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    nz-badge{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    nz-avatar{
+      margin: 4px;
+    }
+  }
+  .avatar:hover{
+    background-color: rgba(var(--ant-primary-color-rgb),0.2);
+  }
+
+  .profile{
+    min-width: 220px;
+    .profile-info{
+      display: flex;
+      padding: 12px 10px 8px 12px;
+      margin-bottom: 4px;
+      align-items: center;
+      border-bottom: 1px solid var(--ant-border-color);
+      nz-avatar{
+        margin-right: 10px;
+      }
+      > div{
+        h5{
+          margin: 0;
+        }
+        p{
+          margin: 0;
+        }
+      }
+    }
+    [nz-menu-item]{
+      [nz-icon]{
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .font-lighter{
+    font-weight: normal;
+    padding: 0 4px;
+    font-size: 14px !important;
+  }
+
+  .text-center{
+    text-align: center;
+  }
+
+  .decimal{
+    text-align: right !important;
+  }
+}
+
+/* Add print styles to ensure fonts are preserved when printing */
+@media print {
+  body, h1, h2, h3, h4, h5, h6, p, span, div, table, th, td {
+    font-family: $primary-font !important;
+  }
+}
+

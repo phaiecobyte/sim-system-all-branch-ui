@@ -1,0 +1,98 @@
+<nz-content>
+  <div class="dashboard">
+    <h2>Dashboard</h2>
+
+    <!-- Key Metrics Cards -->
+    <div nz-row [nzGutter]="16">
+      <div nz-col [nzSpan]="6">
+        <nz-card>
+          <h3>កម្មង់សរុប</h3>
+          <p>{{orderCount}}</p>
+        </nz-card>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-card>
+          <h3>{{'Total Branches' | translate}}</h3>
+          <p>{{branchCount}}</p>
+        </nz-card>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-card>
+          <h3>{{'Total Customers' | translate}}</h3>
+          <p>{{customerCount}}</p>
+        </nz-card>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-card>
+          <h3>{{'Total Products' | translate}}</h3>
+          <p>{{productCount}}</p>
+        </nz-card>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div nz-row [nzGutter]="16" class="chart-row">
+      <div nz-col [nzSpan]="12">
+        <nz-card>
+          <h3>Material Usage</h3>
+          <div echarts [options]="barChartOptions" class="chart"></div>
+        </nz-card>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-card>
+          <h3>Order Status</h3>
+          <div echarts [options]="pieChartOptions" class="chart"></div>
+        </nz-card>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div nz-row [nzGutter]="16" class="action-row">
+      <div nz-col [nzSpan]="6">
+        <button nz-button nzType="primary" nzBlock (click)="productUiService.showAdd()">
+          <span nz-icon nzType="plus"></span>
+          Add Product
+        </button>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <button nz-button nzType="default" (click)="saleUiService.showAdd()" nzBlock>
+          <span nz-icon nzType="file-add"></span>
+          Create Order
+        </button>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <button nz-button nzType="default" nzBlock routerLink="/report">
+          <span nz-icon nzType="bar-chart"></span>
+          Generate Report
+        </button>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <button nz-button nzType="default" nzBlock (click)="customerUiService.showAdd()">
+          <span nz-icon nzType="user-add"></span>
+          Add Customer
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Activity Table -->
+    <nz-card class="recent-activity">
+      <h3>Recent Activity</h3>
+      <nz-table [nzData]="recentActivities" [nzBordered]="false">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Activity</th>
+            <th>User</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let activity of recentActivities">
+            <td>{{ activity.date }}</td>
+            <td>{{ activity.description }}</td>
+            <td>{{ activity.user }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</nz-content>

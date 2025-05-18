@@ -1,0 +1,98 @@
+<div class="report-container">
+  <!-- Add global spinner -->
+  <nz-spin [nzSpinning]="isLoading" [nzSize]="'large'" [nzTip]="'Loading data...'" class="global-spinner">
+    <nz-card nzTitle="Sales Report Generator" [nzBordered]="false" class="report-card">
+      <form [formGroup]="reportForm" (ngSubmit)="generateReport()">
+        <div nz-row [nzGutter]="24" style="padding-top:15px;">
+          <div nz-col nzXs="24" nzSm="12" nzMd="8">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="startDate">Start Date:</nz-form-label>
+              <nz-form-control [nzSpan]="18">
+                <nz-date-picker
+                  id="startDate"
+                  formControlName="startDate"
+                  nzFormat="yyyy-MM-dd"
+                  nzPlaceHolder="Select start date"
+                  class="full-width">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzSm="12" nzMd="8">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzFor="endDate">End Date:</nz-form-label>
+              <nz-form-control [nzSpan]="18">
+                <nz-date-picker
+                  id="endDate"
+                  formControlName="endDate"
+                  nzFormat="yyyy-MM-dd"
+                  nzPlaceHolder="Select end date"
+                  class="full-width">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzSm="24" nzMd="8" class="button-container">
+            <button nz-button nzType="primary" type="submit" [nzSize]="'large'" [nzLoading]="isLoading">
+              <i nz-icon nzType="file-search" nzTheme="outline"></i>Generate Report
+            </button>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+
+    <div *ngIf="reportData.length > 0" class="report-results">
+      <nz-card [nzBordered]="false">
+        <div class="report-header">
+          <h2><i nz-icon nzType="bar-chart" nzTheme="outline"></i> Report Summary</h2>
+          <div class="report-actions">
+            <button nz-button nzType="primary" (click)="exportToExcel()">
+              <i nz-icon nzType="file-excel" nzTheme="outline"></i> Export to Excel
+            </button>
+            <button nz-button nzType="default" (click)="printReport()">
+              <i nz-icon nzType="printer" nzTheme="outline"></i> Print
+            </button>
+          </div>
+        </div>
+
+        <nz-table
+          #basicTable
+          [nzData]="reportData"
+          [nzPageSize]="10"
+          [nzShowPagination]="true"
+          [nzShowSizeChanger]="true"
+          [nzPageSizeOptions]="[10, 20, 50, 100]"
+          [nzBordered]="true"
+          [nzSize]="'middle'"
+          [nzLoading]="isLoading">
+          <thead>
+            <tr>
+              <th nzWidth="25%">Order ID</th>
+              <th nzWidth="25%">Customer Name</th>
+              <th nzWidth="25%">Order Date</th>
+              <th nzWidth="25%">Total Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of basicTable.data">
+              <td><span class="order-id">{{ order.orderId }}</span></td>
+              <td>{{ order.customerName }}</td>
+              <td>{{ order.date | date:'medium' }}</td>
+              <td class="amount-column">{{ order.amount | currency }}</td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate>
+            <div class="total-row">
+              <span>Total: {{ getTotalAmount() | currency }}</span>
+            </div>
+          </ng-template>
+        </nz-table>
+      </nz-card>
+    </div>
+
+    <!-- Add empty state when no data is found after search -->
+    <div *ngIf="reportData.length === 0 && searchAttempted && !isLoading" class="no-data-message">
+      <nz-empty nzNotFoundContent="No data found for the selected date range"></nz-empty>
+    </div>
+  </nz-spin>
+</div>

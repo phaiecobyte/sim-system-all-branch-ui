@@ -1,0 +1,5 @@
+{
+  "BASE_API_URL" : "${BASE_API_URL}",
+  "APP_NAME": "${APP_NAME}",
+  "APP_ICON": "${APP_ICON}"
+}

@@ -1,0 +1,52 @@
+{
+  "Add": "Add",
+  "Branch": "Branch",
+  "Setting": "Settings",
+  "Edit": "Edit",
+  "Delete": "Delete",
+  "Save": "Save",
+  "Cancel": "Cancel",
+
+  "Warehouse": "Warehouse",
+  "Name/Company/Guest": "Name / Company / Guest",
+  "Name": "Name",
+  "Contact Name": "Contact Name",
+  "Contact Phone": "Contact Phone",
+  "Gender": "Gender",
+  "Sex": "Sex",
+  "Description": "Description",
+  "Address": "Address",
+
+  "Sale": "Sale",
+  "Vendor": "Vendor",
+  "User": "User",
+  "Type": "Type",
+  "Code": "Code",
+
+  "NameKh": "Khmer Name",
+  "Qty": "Quantity",
+  "UnitQty": "Unit Quantity",
+
+  "Home": "Home",
+  "Customer": "Customer",
+  "Product": "Product",
+  "Category": "Category",
+  "Category Main": "Main Category",
+  "Brand": "Brand",
+  "UnitType": "Unit Type",
+
+  "Report": "Report",
+  "English": "English",
+  "Short Name": "Short Name",
+  "Install": "Install",
+  "Image": "Image",
+
+  "Customer Code": "Customer Code",
+  "Customer Name": "Customer Name",
+  "Phone": "Phone",
+  "Note": "Note",
+  "Success": "Success",
+  "Add has been successfully!": "Successfully added!",
+  "Update has been successfully!": "Successfully updated!",
+  "Delete has been successfully!": "Successfully deleted!"
+}

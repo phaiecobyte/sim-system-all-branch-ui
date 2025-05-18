@@ -1,0 +1,38 @@
+$color-border-bottom : #f0f0f0;
+@mixin custom-style-button($color){
+  color: $color;
+}
+
+nz-layout {
+  background: inherit;
+  padding: 6px 24px 0;
+  nz-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    height: 40px !important;
+    line-height: 40px !important;
+    background-color: inherit;
+    border-bottom: 1px solid $color-border-bottom;
+    span{
+      line-height: 1;
+      padding: 0 12px;
+    }
+  }
+  nz-content{
+    padding-top: 10px;
+    .content-header{
+      p{
+        margin-bottom: 0;
+        font-weight: bold;
+      }
+    }
+    .content-body{
+      a{
+        span{
+          padding: 0 12px;
+        }
+      }
+    }
+  }
+}

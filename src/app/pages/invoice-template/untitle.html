@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>SIM SYSTEM ALL BRANCH</title>
+  <link href="https://fonts.googleapis.com/css?family=Libre Barcode 39" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Kantumruy" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <style type="text/css">
+    body {
+      overflow: auto;
+      background: #ddd;
+      padding-bottom: 20px;
+    }
+
+    * {
+      font-family: Kantumruy, Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .barcode {
+      font-family: "Libre Barcode 39";
+      font-size: 34px;
+      font-weight: normal;
+      line-height: 20px;
+      margin-bottom: 0px;
+    }
+
+    .report {
+      margin: auto;
+      display: table;
+      background: white;
+      box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 2px 2px 0px rgba(0, 0, 0, 0.24);
+      font-family: Kantumruy, Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .report .report-header {
+      float: left;
+      width: 100%;
+    }
+
+    .invoice-title {
+      font-weight: 900;
+      letter-spacing: 1em;
+      letter-spacing: 0.1rem;
+      margin-top: 0 !important;
+    }
+
+    .report .report-body {
+      width: 100%;
+    }
+
+    .report .report-footer {
+      width: 100%;
+    }
+
+    .report .report-header {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .navbar {
+      margin-bottom: 10px;
+    }
+
+    .report {
+      margin-top: 10px;
+    }
+
+    /* a4 */
+    .report.a4 {
+      padding: 20px;
+    }
+
+    .report.a4 .company-info img {
+      max-height: 60px;
+    }
+
+    .report.a4.portrait {
+      width: 21cm;
+      min-height: 29.7cm;
+    }
+
+    label,
+    .label {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .suffix,
+    .prefix {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .suffix {
+      margin-left: 5px;
+    }
+
+    .prefix {
+      margin-right: 5px;
+    }
+
+    .colon::after {
+      content: " :  ";
+      margin-right: 10px;
+    }
+
+    .bg {
+      background: #ddd;
+    }
+
+    .bg-1 {
+      background: rgb(143 222 255);
+    }
+
+    .bg-2 {
+      background-color: rgb(143 222 255);
+    }
+
+    .bg-3 {
+      background-color: rgb(143 222 255);
+    }
+
+    .focus {
+      font-size: 20px;
+      background-color: lightyellow;
+    }
+
+    div.company-header-info h4 {}
+
+    @@media print {
+
+      th.bg,
+      span.bg {
+        background: #ddd !important;
+      }
+
+      th.bg-1,
+      span.bg-1,
+      h2.bg-1 {
+        background: #f5a8be !important;
+      }
+
+      th.bg-2,
+      span.bg-2,
+      h2.bg-2 {
+        background-color: #f1d397 !important;
+      }
+
+      th.bg-3,
+      span.bg-3,
+      h2.bg-3 {
+        background-color: #b7eff5 !important;
+      }
+
+      th.focus {
+        background-color: lightyellow !important;
+      }
+
+      div.company-header-info h4 {}
+    }
+
+    .data {
+      font-size: 13px;
+      color: #000;
+    }
+
+    .data.highlight {
+      font-weight: bolder;
+    }
+
+    .brk {
+      display: block;
+    }
+
+    .decimal {
+      text-align: right;
+    }
+
+    .note {
+      font-size: 11px;
+      font-weight: lighter;
+    }
+
+    .invoice-data .data {
+      display: inline-block;
+      width: 110px;
+      text-overflow: ellipsis;
+    }
+
+    .small {
+      font-size: 11px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="nav-bar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <div class="navbar-brand">
+        </div>
+      </div>
+      <div class="nav navbar-nav navbar-right" style="margin: 0">
+        <input type="checkbox" id="show-signature" name="show-signature" /><label for="show-signature" ​
+          style="margin-right:20px;margin-left:10px;"></label>
+        <button class="btn btn-info navbar-btn" id="print-button" onclick="javacript:window.print();">
+          <i class="fa fa-print" style="margin-right: 5px"></i>បោះពុម្ព
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="report-wrapper" style="margin-top: 55px">
+    @{var i=0; }
+    <div id="report" class="report a4 portrait">
+      <div class="report-header">
+        <div class="row">
+          <div class="col-xs-2 logo"></div>
+          <div class="col-xs-5 text-left company-header-info">
+            <h4 style="margin-bottom:5px;font-size:25px">MIS Company</h4>
+            ផ្លូវ ១០៣ សង្កាត់ភ្នំពេញថ្មី ខណ្ឌសែនសុខ <br /> រាជធានីភ្នំពេញ
+            </p>
+            <p>
+              +855 023 123 456 | +855 023 123 456
+            </p>
+          </div>
+          <div class="col-xs-5 text-right">
+            <h1 class="invoice-title">វិក្កយបត្រ</h1>
+            <p class="barcode"></p>
+            <p></p>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-xs-6">
+            <label class="brk">អតិថិជន</label>
+            <span class="brk data highlight">@Model.Customer.Name</span>
+            <span class="brk data">អាសយដ្ឋានៈ @Model.Customer.Location</span>
+            <span class="brk data">+885 @Model.Customer.Phone</span>
+            <span class="brk data">Cashier: Admin </span>
+          </div>
+          <div class="col-xs-6">
+            <div class="brk text-right invoice-data">
+              <label class="colon">ថ្ងៃចេញ</label><span class="data">@Model.Order.Date</span><br />
+              <label class="colon">ថ្ងៃផុតកំណត់</label><span class="data">10-01-2026</span><br />
+              <label class="colon">លេខយោង</label><span class="data">....................</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-body">
+        <div class="row">
+          <div class="col-xs-12">
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th class="bg-1">ល.រ</th>
+                  <th class="bg-1 col-md-5">រាយនាមមុខទំនិញ</th>
+                  <th class="bg-1 col-md-1">ចំនួន</th>
+                  <th class="bg-1 col-md-2 decimal">តម្លៃឯកតា</th>
+                  <th class="bg-1 col-md-2 decimal">បញ្ចុះតម្លៃ</th>
+                  <th class="bg-1 col-md-1 decimal">សរុប</th>
+                </tr>
+              </thead>
+              <tbody>
+                @{i=1;}
+                @foreach(var item in Model.Order.OrderDetails)
+                {
+                <tr>
+                  <td>@(i++)</td>
+                  <td>@item.Product.Name</td>
+                  <td class="text-center">@item.QTY</td>
+                    <td class="decimal">@item.Price.ToString("0.00") $</td>
+                    <td class="decimal">@item.Discount.ToString("0.##") %</td>
+                  <td class="decimal">@(item.Price * (double)item.QTY) $</td>
+                </tr>
+                }
+
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th class="bg-2" colspan="5">Price before Discount</th>
+                  <th class="bg-2 decimal">@((Model?.Order?.Amount / (1 - (Model?.Order?.Discount / 100)))?.ToString("0.00") ?? "N/A") $</th>
+                </tr>
+                <tr>
+                <tr>
+                  <th class="bg-2" colspan="5">សរុបត្រូវបង់</th>
+                  <th class="bg-2 decimal">@Model?.Order?.Amount?.ToString("0.00") $</th>
+                </tr>
+                <tr>
+                  <th class="bg-2" colspan="5">បញ្ចុះតម្លៃ</th>
+                  <th class="bg-2 decimal">@((Model?.Order?.Discount)?.ToString("0.##") ?? "N/A") %</th>
+                </tr>
+
+                <tr>
+                  <th class="bg-2" colspan="5">បានបង់</th>
+                  <th class="bg-2 decimal">@Model?.Order?.Deposit?.ToString("0.00") $</th>
+                </tr>
+                <tr>
+                  <th class="bg-3" colspan="5">ជំពាក់</th>
+                  <th class="bg-3 decimal">@((Model?.Order?.Amount - Model?.Order?.Deposit)?.ToString("0.00")) $</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-footer">
+        <div class="row">
+          <div class="col-xs-12 text-center">
+            <hr />
+            <span>ហត្ថលេខា</span>
+            <div style="height: 50px;"></div>
+            <span>សូមអរគុណ!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

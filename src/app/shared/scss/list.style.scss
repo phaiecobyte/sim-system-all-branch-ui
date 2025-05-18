@@ -1,0 +1,81 @@
+nz-header{
+  display: flex;
+  justify-content: space-between;
+  background-color: inherit;
+  padding: 0 16px;
+  [nz-flex]{
+    width: 100%;
+  }
+
+}
+
+nz-content{
+  margin: 0 16px !important;
+}
+
+a {
+  > i{
+    padding-right: 2px !important;
+  }
+}
+
+.col-action{
+  text-align: right;
+}
+
+th::before{
+  display: none !important;
+}
+
+tbody > tr > td {
+  vertical-align: top;
+}
+
+tbody > tr > td > p {
+  margin-bottom: 0;
+}
+tbody > tr > td > p > span {
+  font-size: 12px;
+}
+tbody > tr > td > span {
+  font-size: 12px;
+}
+
+
+button {
+  margin-left: 20px;
+}
+
+.status{
+  display: inline-block;
+  background: #eee;
+  border-radius: 6px;
+  padding: 0 6px;
+}
+
+img{
+  object-fit: contain;
+  border-radius: var(--ant-border-radius);
+}
+
+.employee-profile{
+  display: flex;
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  background-color: lightgray;
+  align-items: center;
+  justify-content: center;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 50px;
+  }
+}
+
+[nz-card-grid]{
+  width: 25%;
+  text-align: center;
+}
+

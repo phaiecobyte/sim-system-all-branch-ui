@@ -1,0 +1,97 @@
+/**
+Style for modal
+ */
+
+.ant-modal-header{
+  padding: 4px 10px;
+  text-align: center;
+  border-radius: 6px !important;
+}
+
+.ant-modal-title {
+  font-size: 12px;
+  color: #000000a6;
+}
+
+
+.ant-modal-close-x {
+  font-size: 12px;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+}
+
+.ant-modal {
+  top: 64px;
+}
+
+.ant-modal-content{
+  border-radius: 6px !important;
+}
+
+.ant-modal-body {
+  padding: 0 0 12px 0;
+  overflow-y: auto;
+  max-height: calc(100vh - 88px);
+  border-radius: 6px;
+}
+
+.btn-close{
+  color: gray !important;
+}
+
+/**
+  Style for from operation model
+*/
+
+[nz-form] {
+  padding-top: 22px;
+
+  .ant-form-item {
+    margin-bottom: 0.98rem !important;
+
+    button {
+      margin-right: 8px;
+      font-size: 13px;
+      padding: 0 32px;
+    }
+  }
+
+  .text-header {
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #00000073;
+  }
+
+  nz-date-picker {
+    width: 100%;
+  }
+  nz-input-number {
+    width: 100%;
+  }
+
+  .input-number {
+    text-align: right;
+  }
+}
+
+.ant-form-item-extra {
+  font-size: 10px !important;
+}
+
+.ant-form-item-explain-error {
+  font-size: 11px;
+  position: absolute;
+}
+
+.ant-form-item-with-help .ant-form-item-explain {
+  min-height: 0;
+}
+
+.loading{
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999
+}
